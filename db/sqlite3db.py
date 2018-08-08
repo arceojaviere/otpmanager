@@ -16,6 +16,7 @@ class Sqlite3Backend(OtpDatabaseBackend):
 
   def persistCount(self, tokenId, count):
     self.connection.execute("UPDATE TOKEN SET COUNT = :count WHERE TOKEN_ID = :tokenId", {"tokenId": tokenId, "count": count})
+    self.connection.commit()
   
   def retrieveCount(self, tokenId):
     print "ID: " + tokenId
