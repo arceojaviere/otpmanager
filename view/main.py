@@ -12,36 +12,60 @@ class MainWindow(Gtk.Window):
   otpGenerator = OTPGenerator()
   otpDatabase = OtpDatabase()
   
-  tokenEntry = None
-  otpEntry = None
-
+  
   def __init__(self, title = "OTP Manager"):
     Gtk.Window.__init__(self, title = title)    
-    self._addComponents()
-    self._token = self.otpDatabase.getTokens()[0]
-    self.tokenEntry.set_text(self._token.tokenId)
-      
+    self.set_default_size(250,150)
+    self._addComponents(self.otpDatabase.getTokens())
 
-
-  def _addComponents(self):
-    box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL,spacing = 6)
-
-    self.tokenEntry = Gtk.Entry(editable = False)
-    self.otpEntry = Gtk.Entry(editable = False)
-    button = Gtk.Button(label="Generate token")
-    button.connect("clicked", self._generateToken)
-    
-    box.add(self.tokenEntry)
-    box.add(self.otpEntry)
-    box.add(button)
-
-    self.add(box)  
+  def _addComponents(self, tokens):
+    scrolledWindow = Gtk.ScrolledWindow()
+    mainBox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 12)
+    for token in tokens:
+      box = TokenBox(token, self._generateToken)
+      mainBox.add(box)
+    scrolledWindow.add(mainBox)
+    self.add(scrolledWindow)
 
   def _generateToken(self, widget):
     print "Generating token"
-    secret = self._token.secret
-    count = self.otpDatabase.nextCount(self._token.tokenId)
+    box = widget.get_parent()
+    token = box.getToken()
+    count = self.otpDatabase.nextCount(token.tokenId)
     print "Count: " + str(count)
-    self.otpEntry.set_text(self.otpGenerator.newHotp(self._token.secret, count))
+    box.setOtp(self.otpGenerator.newHotp(token.secret, count))
     
 
+class TokenBox(Gtk.Box):
+  
+  _tokenEntry = None
+  _otpEntry = None
+  _token = None  
+
+  _button = None
+
+  def __init__(self, token, buttonClickedCallback):
+    self._token = token
+    Gtk.Box.__init__(self, orientation = Gtk.Orientation.VERTICAL, spacing = 6)
+    self._addComponents(buttonClickedCallback)
+  
+  def _addComponents(self, buttonClickedCallback):
+
+    self._tokenEntry = Gtk.Entry(editable = False)
+    self._tokenEntry.set_text(self._token.tokenId)
+
+    self._otpEntry = Gtk.Entry(editable = False)
+
+    self._button = Gtk.Button(label="Generate token")
+    self._button.connect("clicked", buttonClickedCallback)
+
+    self.add(self._tokenEntry)
+    self.add(self._otpEntry)
+    self.add(self._button)
+
+  def getToken(self):
+    return self._token
+
+  def setOtp(self, otp):
+    self._otpEntry.set_text(otp)
+    
