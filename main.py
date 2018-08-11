@@ -1,4 +1,4 @@
-from view.main import MainWindow
+from otpmanager.view.main import MainWindow
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk

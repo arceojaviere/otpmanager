@@ -1,7 +1,7 @@
 import sqlite3
 import os
-from db.otpdb import OtpDatabaseBackend, OtpDatabaseException
-from data.model import Token
+from otpmanager.db.otpdb import OtpDatabaseBackend, OtpDatabaseException
+from otpmanager.data.model import Token
 
 class Sqlite3Backend(OtpDatabaseBackend):
 

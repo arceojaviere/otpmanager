@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from data.model import Token
+from otpmanager.data.model import Token
 
 class OtpDatabase:
  

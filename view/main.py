@@ -2,9 +2,9 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
-from otp.generator import OTPGenerator
-from db.otpdb import OtpDatabase
-from data.model import Token
+from otpmanager.otp.generator import OTPGenerator
+from otpmanager.db.otpdb import OtpDatabase
+from otpmanager.data.model import Token
 
 import datetime
 
