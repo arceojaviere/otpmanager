@@ -19,10 +19,8 @@ class Sqlite3Backend(OtpDatabaseBackend):
     self.connection.commit()
   
   def retrieveCount(self, tokenId):
-    print "ID: " + tokenId
     cursor = self.connection.execute("SELECT COUNT FROM TOKEN WHERE TOKEN_ID = :tokenId", {"tokenId": tokenId})
-    results = cursor.fetchall()    
-    print len(results)
+    results = cursor.fetchall()
     if len(results) != 1:
      raise Sqlite3Exception("Unexpected result set size. Expected exactly one item, got " + str(cursor.rowcount))
     return results[0][0]
@@ -33,6 +31,9 @@ class Sqlite3Backend(OtpDatabaseBackend):
     for row in cursor.fetchall():
       tokens.append(Token(tokenId = row[0], secret = row[1], secretEncoding = row[2]))
     return tokens
+
+  def addToken(self, token):
+    self.connection.execute("INSERT INTO TOKEN VALUES(:tokenId, :secret, :secretEncoding, :counter)", {"tokenId": token.tokenId, "secret": token.secret, "secretEncoding": token.secretEncoding, "counter": token.counter})
 
 class Sqlite3Exception(OtpDatabaseException):
   def __init__(self, value):

@@ -7,6 +7,7 @@ import binascii
 
 class OTPGenerator:
 
+# TODO: Move these to a more general namespace
   ENCODING_BASE32 = 'b32'
   ENCODING_HEX = 'hex'
   ENCODING_RAW = 'raw'

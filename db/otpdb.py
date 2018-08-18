@@ -16,6 +16,9 @@ class OtpDatabase:
 
   def getTokens(self):
     return self._backend.getTokens()
+
+  def addToken(self, token):
+    self._backend.addToken(token)
     
   
 class OtpDatabaseBackend:
