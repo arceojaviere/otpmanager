@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk,Gdk
 
 from otpmanager.otp.generator import OTPGenerator
 from otpmanager.otp.uri import UriParser
@@ -88,6 +88,7 @@ class TokenBox(Gtk.Box):
 
     self._button = Gtk.Button(label="Generate token")
     self._button.connect("clicked", buttonClickedCallback)
+    self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
     self.add(self._tokenEntry)
     self.add(self._otpEntry)
@@ -96,4 +97,6 @@ class TokenBox(Gtk.Box):
     
   def _generateToken(self, widget):
     count = self.otpManager.otpDatabase.nextCount(self._token.tokenId)
-    self._otpEntry.set_text(self.otpManager.otpGenerator.newHotp(self._token.secret, count))
+    otp = self.otpManager.otpGenerator.newHotp(self._token.secret, count)
+    self._clipboard.set_text(otp, -1)
+    self._otpEntry.set_text(otp)
