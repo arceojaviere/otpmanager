@@ -23,7 +23,7 @@ class MainWindow(Gtk.Window):
     self.set_default_size(250,150)
     self._addComponents(self.otpDatabase.getTokens())
     self.show_all()
-    self.connect("destroy", Gtk.main_quit)
+    self.connect("delete-event", self.hide_window)
 
   def _addComponents(self, tokens):
     topBox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 12)
@@ -68,6 +68,10 @@ class MainWindow(Gtk.Window):
     self.otpDatabase.addToken(token)
     self._addTokenBox(token)
     self.show_all()
+
+  def hide_window(self, widget, event):
+    self.hide()
+    return True
 
 
 class TokenBox(Gtk.Box):
