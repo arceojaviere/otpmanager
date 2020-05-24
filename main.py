@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from otpmanager.view.mainview import MainWindow
 from otpmanager.view.mainview import StatusIcon
 
